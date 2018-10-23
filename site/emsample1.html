@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EasyMarkers Sample 1</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            
+            #sampleMap {
+                width: 80%;
+                margin: 0px auto;
+                height: 400px;
+            }
+
+        </style>
+        
+        <!-- OpenLayers -->
+        <link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+        <script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>
+        
+        <!-- EasyMarkers -->
+        <link href="easy-markers/easy-markers.css" rel="stylesheet" type="text/css" />
+        <script src="easy-markers/easy-markers.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <h1>EasyMarkers Sample 1</h1>
+        <p>Right-click and view source to use this sample</p>
+        <div id="sampleMap" class="map"></div>
+        
+        
+        <script type="text/javascript">
+
+            var em = makeEM({ mapId: "sampleMap1" });
+
+            em.loadMarkers([{"coord": [-5752956.496855505, -1141459.821446727], "title": "Brazil", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Emoji_u1f6a9.svg/40px-Emoji_u1f6a9.svg.png", "popupHTML": "<h2 id='title'>Brazil</h2>\n<p id='desc'>Something about brazil</p>"}, {"coord": [-11271098.442818947, 2498165.7173802257], "title": "Mexico", "image": "", "popupHTML": "<h2 id='title'>Mexico</h2>\n<p id='desc'>Mexico is cool</p>"}, {"coord": [5048512.844179325, -2119853.7834969824], "title": "Madagascar", "image": "", "popupHTML": "<h2 id='title'>Madagascar</h2>\n<p id='desc'>So big that it might not be an island?</p>"}, {"coord": [-1956787.9241005145, 9581738.002624083], "title": "Iceland", "image": "", "popupHTML": "<h2 id='title'>Iceland</h2>\n<p id='desc'>I want to go here and look at waterfalls</p>"}, {"coord": [8570731.10756024, 2732980.2682722863], "title": "India", "image": "", "popupHTML": "<h2 id='title'>India</h2>\n<img src=\"https://www.carstickers.com/prodimages/5847_india_country_flag_decal_sticker_small.png\">\n"}]);
+
+            em.addMarker({
+                coord: [2371627.202875534, 2889523.3022003286],
+                title: "Libya",
+                image: "",
+                popupHTML: "\n\
+        <img src='https://www.gettysburgflag.com/media/catalog/product/cache/2/thumbnail/520x416/602f0fa2c1f0d1ba5e241f914e856ff9/l/i/libya-2014.png'>\n\
+        <p>Here's some sample text; something about Libya.</p>"
+            });
+
+        </script>
+    </body>
+</html>

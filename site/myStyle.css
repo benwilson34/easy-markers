@@ -1,0 +1,180 @@
+html, body {
+    margin:0; /* don't want tiny white border inside browser window */
+    padding:0; /* don't want tiny white border inside browser window */
+}
+body {
+    font-family: 'Lato', sans-serif;
+    font-size:16px;
+    color: #505050;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+h1 {
+    text-align: center;
+}
+h3{
+    margin-top: 40px;
+}
+img {
+    width:100%;
+    border-radius: 10px;
+    margin: 10px auto 0px auto; /* center with a bit of headroom */
+}
+hr {
+    width: 90%;
+    margin: 0px auto;
+}
+
+.bg {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    /*min-width: 600px;*/
+    height: 100vh;
+}
+#bg-img {
+    background-image: url("./pics/map.jpg");
+    filter: saturate(50%); 
+    z-index: -2;
+}
+#bg-grad {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+1,000000+100&0+60,0.35+100 */
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.35) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 1%,rgba(0,0,0,0) 60%,rgba(0,0,0,0.35) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 1%,rgba(0,0,0,0) 60%,rgba(0,0,0,0.35) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#59000000',GradientType=0 ); /* IE6-9 */
+    z-index: -1;
+}
+
+/*#titleNav {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #505050;
+    padding: 0px 30px 0px 30px;
+}*/
+#titleBlock{
+    text-align: center;
+    margin-top:30px;
+}
+#pageTitle { /* position web site title inside the titleNav */
+    /*float:left;*/
+}
+#pageTitle {
+    text-decoration: none;
+    color: #505050;
+    font-size:75px;
+    font-weight:bold;
+    
+}
+#pageTitle img {
+    height: 60px;
+    width: auto;
+}
+
+#subtitle {
+    font-size: 24px;
+    font-style: italic;
+    position: relative;
+    top: -25px;
+}
+
+/*#nav {
+    float: right;
+    letter-spacing: 1px;
+    vertical-align: bottom;
+}
+#nav a {
+    text-decoration:none;
+    color: #505050;
+}
+#nav div {
+    margin-top:70px;
+    margin-left: 6px;
+    float:left;
+    font-size:22px;
+    padding: 6px;
+    padding-top:15px;
+    padding-bottom: 15px;
+    text-align:center;
+    letter-spacing: 1px;
+    vertical-align: bottom;
+    border-radius: 20px 20px 0px 0px;
+}
+#nav div:hover {
+    background-color: #F3F3F3;
+}*/
+
+.stopFloat {
+    clear:both;
+}
+
+.middleArea {
+    width: 80%;
+    min-width: 700px;
+    margin: 0px auto;
+    box-sizing: border-box;
+}
+
+.content {
+    border-radius: 20px 20px 0px 0px;
+    background-color: #F3F3F3;
+    padding: 20px 70px 70px 70px;
+}
+.content a {
+    color: rgb(201,42,42);
+    font-weight: bold;
+    text-decoration: none;
+}
+.content a:link {
+    color: rgb(201,42,42);
+    font-weight: bold;
+    text-decoration: none;
+}
+.content a:visited {
+    color: rgb(201,42,42);
+    font-weight: bold;
+}
+.content a:hover {
+    color: red;
+}
+
+#footer {
+    background-color: #505050;
+    color: #F3F3F3;
+    /*clear:both;*/
+    text-align:center;
+    padding: 20px;
+    border-radius: 0px 0px 20px 20px;
+    margin-bottom: 50px;
+}
+
+.width33Pct {
+    /*padding-top: 22px;*/
+    padding: 1%;
+    width:33.3%;
+    float:left;
+    box-sizing: border-box;
+}
+.width33Pct img {
+    display: block;
+    width: 80%;
+    height: auto;
+}
+.width66Pct {
+    /*padding: 6% 4%;*/
+    width:66.6%;
+    float:left;
+    box-sizing: border-box;
+}
+.text-block {
+    padding: 10px;
+}
+
+
+#tutNav {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

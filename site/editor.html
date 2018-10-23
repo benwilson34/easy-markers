@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <link rel="shortcut icon" href="./pics/icon.png" type="image/x-icon">
+        <title>EasyMarkers editor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            html, body {
+                margin: 0px;
+                padding: 0px;
+            }
+            
+            h2 {
+                width: 79%;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+            
+            #bSaveJSON {
+                width: 20%;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            .map {
+                height: 300px;
+                width: 100%;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            #popupEdit {
+
+            }
+
+            #popupPreviewPane {
+                background-color: lightblue;
+                padding: 0px 20px;
+            }
+            
+            #previewIcon {
+                margin-left: 30px;
+            }
+            
+            #in_image {
+                width: 230px;
+            }
+
+            #in_popup {
+                height: 40%;
+                width: 95%;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            .third {
+                width: 33%;
+                height: 300px;
+                vertical-align: top;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            #list {
+                overflow-y: scroll;
+            }
+
+            #listTable {
+                border-collapse: collapse;
+            }
+
+            #listTable td {
+                border-top: thin solid black;
+                padding: 4px;
+            }
+        </style>
+        
+        <!-- OpenLayers -->
+        <link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+        <script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>
+        
+        <!-- EasyMarkers -->
+        <link href="../easy-markers/easy-markers.css" rel="stylesheet" type="text/css" />
+        <script src="../easy-markers/easy-markers.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <h2>EasyMarkers Editor</h2>
+        <button id="bSaveJSON" onclick="generate()">Generate</button>
+
+        <div id="map" class="map"></div>
+
+        <div id="list" class="third">
+            <table id="listTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Coord</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div id="popupEdit" class="third">
+            Image src: <input id="in_image" type="text">
+            <p>Popup HTML</p>
+            <textarea id="in_popup"></textarea>
+        </div>
+
+        <div id="popupPreviewPane" class="third">
+            <p>Popup preview</p>
+            <div id="popupPreview" style="position:static">
+                <div id="popupContent"></div>
+            </div>
+            <img id="previewIcon" src="">
+        </div>
+
+
+        <script type="text/javascript">
+
+            // so I don't have to use jQuery
+            function my$(el) {
+                return document.getElementById(el);
+            }
+
+            var em = makeEM({mapId: "map", editorMode: true, mapClickFn: newMarker});
+
+            var rowElems = null;
+            var markerCount = 0;
+
+            function newMarker(e) {
+                if (!rowElems) {
+                    function toTd(el) {
+                        var td = document.createElement("td");
+                        td.appendChild(el);
+                        return td;
+                    }
+
+                    markerCount++;
+
+                    var row = document.createElement("tr");
+                    row.setAttribute("markerNum", markerCount);
+
+                    var button = document.createElement("button");
+                    button.innerHTML = "INSERT";
+                    button.addEventListener('click', confirm);
+                    row.appendChild(toTd(button));
+
+                    var title = document.createElement("input");
+                    title.type = "text";
+                    title.value = "New Marker " + markerCount;
+                    row.appendChild(toTd(title));
+
+                    var coord = document.createElement("td");
+                    coord.style.fontSize = "12px";
+                    row.appendChild(coord);
+
+                    my$("listTable").appendChild(row);
+
+                    rowElems = {
+                        row: row,
+                        button: button,
+                        title: title,
+                        coord: coord
+                    };
+                }
+
+                rowElems.coord.innerHTML = e.coordinate[0] + "\n" + e.coordinate[1];
+            }
+
+            function update() {
+                var title = rowElems.title.value;
+                em.updateCurrentMarker({title: title});
+            }
+
+            function confirm() {
+                var title = rowElems.title.value;
+                console.log("confirming marker with title="+title);
+                
+                update();
+                // actually add the marker
+                var coords = rowElems.coord.innerHTML.split("\n");
+                var realCoord = [ parseFloat(coords[0]), parseFloat(coords[1]) ];
+                em.confirmCurrentMarker({
+                    coord: realCoord,
+                    title: title,
+                    image: inImage.value,
+                    popupHTML: inPopup.value
+                });
+                
+                // replace input elem with plain text
+                rowElems.title.parentNode.innerHTML = title;
+
+                // have to do this because of closure...
+                rowElems.button.innerHTML = "DELETE";
+                function setOnClick(num, row) {
+                    rowElems.button.removeEventListener('click', confirm);
+                    rowElems.button.addEventListener('click', function () {
+                        row.style.display = "none";
+                        em.removeMarker(num);
+                    });
+                }
+                setOnClick(markerCount, rowElems.row);
+
+                // have to do this because of closure...
+                function setRowEvent(elem, type, vis) {
+                    var button = rowElems.button;
+                    elem.addEventListener(type, function () {
+                        button.style.visibility = vis;
+                    });
+                }
+                setRowEvent(rowElems.row, 'mouseenter', 'visible');
+                setRowEvent(rowElems.row, 'mouseleave', 'hidden');
+
+                rowElems = null;
+            }
+            
+            function generate(){
+                em.generateJSON();
+            }
+
+
+            // popup preview
+            var inPopup = my$("in_popup");
+            var popupPreview = my$("popupPreview");
+            var inImage = my$("in_image");
+            var imagePreview = my$("previewIcon");
+            inPopup.value = "\
+<h2 id='title'>My Title</h2>\n\
+<p id='desc'>here's a description</p>";
+
+            var area = inPopup.parentNode.querySelector('textarea');
+            if (area.addEventListener) {
+                area.addEventListener('input', function () {
+                    // event handling code for sane browsers
+                    em.preview(area.value, popupPreview, inImage.value, imagePreview);
+                }, false);
+            } else if (area.attachEvent) {
+                area.attachEvent('onpropertychange', function () {
+                    // IE-specific event handling code
+                    em.preview(area.value, popupPreview, inImage.value, imagePreview);
+                });
+            }
+
+            em.preview(area.value, popupPreview, inImage.value, imagePreview);
+
+        </script>
+    </body>
+</html>

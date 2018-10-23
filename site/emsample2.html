@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EasyMarkers Sample 2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            
+            #sampleMap {
+                width: 80%;
+                margin: 0px auto;
+                height: 400px;
+            }
+
+        </style>
+        
+        <!-- OpenLayers -->
+        <link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+        <script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>
+        
+        <!-- EasyMarkers -->
+        <link href="easy-markers/easy-markers.css" rel="stylesheet" type="text/css" />
+        <script src="easy-markers/easy-markers.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <h1>EasyMarkers Sample 2</h1>
+        <p>Right-click and view source to use this sample. Clicking on the marker will show an alert with the title and coordinate, then it will show the popup and hide it after 2 seconds.</p>
+        <div id="sampleMap" class="map"></div>
+        
+        
+        <script type="text/javascript">
+
+            var em = makeEM({ mapId: "sampleMap", markerClickFn: myClick});
+            
+            em.addMarker({
+                coord: [2371627.202875534, 2889523.3022003286],
+                title: "Libya",
+                image: "",
+                popupHTML: "\n\
+        <img src='https://www.gettysburgflag.com/media/catalog/product/cache/2/thumbnail/520x416/602f0fa2c1f0d1ba5e241f914e856ff9/l/i/libya-2014.png'>\n\
+        <p>Here's some sample text; something about Libya.</p>"
+            });
+            
+            function myClick(marker){
+                var coord = "("+marker.coord[0]+", "+marker.coord[1]+")";
+                alert("You clicked on "+marker.title+", located at "+coord+"!");
+                // the popup will be displayed, then hidden after 2 seconds
+                em.showPopup(marker);
+                setTimeout(em.hidePopup, 2000);
+            }
+
+        </script>
+    </body>
+</html>

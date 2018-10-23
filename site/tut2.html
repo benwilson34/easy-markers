@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EasyMarkers Tutorial - Example 2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+
+            #map {
+                width: 80%;
+                margin: 0px auto;
+                height: 400px;
+            }
+
+        </style>
+
+        <!-- OpenLayers -->
+        <link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+        <script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <h2>EasyMarkers Tutorial - Example 2</h2>
+        <p>Right-click and view source to use this example</p>
+        <div id="map" class="map"></div>
+
+
+        <script type="text/javascript">
+
+            // init map and layers
+            var vectorSource = new ol.source.Vector();
+            var vectorLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+            var olview = new ol.View({
+                center: [0, 0],
+                zoom: 2,
+                minZoom: 2,
+                maxZoom: 20
+            });
+
+            var map = new ol.Map({
+                target: document.getElementById("map"),
+                view: olview,
+                layers: [
+                    new ol.layer.Tile({
+                        style: 'Aerial',
+                        source: new ol.source.OSM()
+                    }),
+                    vectorLayer
+                ]
+            });
+
+            var myIcon = '//openlayers.org/en/v3.8.2/examples/data/icon.png';
+            var myTitle = "Some title";
+            var coord = [0, 0];
+
+            var marker = new ol.Feature(
+                    new ol.geom.Point(coord)
+                    );
+
+            var style = new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    opacity: 0.75,
+                    src: myIcon
+                }),
+                text: new ol.style.Text({
+                    font: '12px Calibri,sans-serif',
+                    fill: new ol.style.Fill({color: '#000'}),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff', width: 2
+                    }),
+                    text: myTitle
+                })
+            });
+
+            marker.setStyle(style);
+
+            vectorSource.addFeature(marker);
+
+        </script>
+
+    </body>
+</html>

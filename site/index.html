@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="./pics/icon.png" type="image/x-icon">
+        <title>EasyMarkers</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+
+            pre {
+                font-size: 14px;
+                margin-bottom: 40px;
+            }
+            
+            #sampleMap1, #sampleMap2 {
+                width: 80%;
+                margin: 0px auto;
+                height: 400px;
+            }
+
+            #fnsTable {
+                border-collapse: collapse;
+                margin-bottom: 40px;
+            }
+            #fnsTable td {
+                padding: 4px;
+                border: thin solid black;
+            }
+
+        </style>
+
+        <!-- Angular -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        
+        <!-- OpenLayers -->
+        <link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+        <script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>
+        
+        <!-- EasyMarkers -->
+        <link href="../easy-markers/easy-markers.css" rel="stylesheet" type="text/css" />
+        <script src="../easy-markers/easy-markers.js" type="text/javascript"></script>
+        
+        <!-- highlight.js -->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        
+        <!-- styles -->
+        <link href="https://fonts.googleapis.com/css?family=Lato|Source+Sans+Pro:400,700" rel="stylesheet"> 
+        <link href="./myStyle.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body ng-app="app">
+
+        <div ng-include src="'top.html'"> </div> <!-- will insert "top.html" code here -->
+
+        <div class="content middleArea">
+            
+            <div ng-include src="'tut-nav.html'"> </div> <!-- will insert "tut-nav.html" code here -->
+
+            <hr>
+
+            <h3>Introduction</h3>
+            <p>
+                Implementing a "slip map" on an HTML page using an API is not necessarily difficult, but there is quite a bit of research and overhead needed to do something as simple as create a map with custom markers. This is why I created EasyMarkers - to simplify the process down to only some of the parts that an HTML/Javascript coder would want for their page.
+            </p>
+            <p>
+                If you are interested, here is <a href="tutorial.html">a brief tutorial</a> detailing the development process of EasyMarkers.
+            </p>
+
+
+            <h3>Features</h3>
+            <ul>
+                <li>
+                    Easily place interactive markers on a slip map - maybe mark branches/offices of a business, photography spots, art installations, biographical/historical info (born in such-n-such, moved to such-n-such for x years, etc…)
+                </li>
+                <li>
+                    Customize marker images (icons) and text
+                </li>
+                <li>
+                    Built-in popups that appear when markers are clicked, with customizable HTML that displays inside the popup. For more control, easily specify your own onclick callback function
+                </li>
+                <li>
+                    Use the <a href="editor.html" target="_blank">EasyMarkers Editor</a> to easily (graphically) set up markers and generate code to display them
+                </li>
+            </ul>
+
+            <p>
+                See the sample below for an example of the framework in action. Try out the slip map functionality (slipping with mouse drag & zooming with mouse wheel). Click on markers to reveal their popups, and click anywhere on the map to hide them.
+            </p>
+            <div id="sampleMap1" class="map"></div>
+
+
+
+            <h3>Basic Usage</h3>
+            <p>
+                Use EasyMarkers yourself by first <a href="easy-markers.zip">downloading this zip archive</a> which includes the Javascript and CSS files. Extract and place the easy-marker folder in the same directory as the page you're trying to use it with. Then in your HTML file, include the following tags before your script:
+            </p>
+            <pre><code class='html'>
+    &lt;!-- OpenLayers -->
+    &lt;link href="https://openlayers.org/en/v4.4.2/css/ol.css" rel="stylesheet" type="text/css" />
+    &lt;script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript">&lt;/script>
+
+    &lt;!-- EasyMarkers -->
+    &lt;link href="easy-markers/easy-markers.css" rel="stylesheet" type="text/css" />
+    &lt;script src="easy-markers/easy-markers.js" type="text/javascript">&lt;/script>
+            </code></pre>
+            <p>
+                In your script, create the framework object by calling <strong>makeEM()</strong>, passing in the id of the div where you want the map, and optionally, the function that you want called when a marker is clicked:
+            </p>
+            <pre><code class='js'>
+    var em = makeEM({ mapId: "theIdOfYourMapDiv" });
+            </code></pre>
+            <p>
+                From here, you have access to the framework's functions through the <strong>em</strong> object.
+            </p>
+            <table id="fnsTable">
+                <tr>
+                    <td><pre>em.addMarker(params)</pre></td>
+                    <td>This is the main function of the framework, used to add new markers to the map. The <strong>params</strong> object has the following options:
+                        coord: (required) an array with two elements; the x and y members of the coordinate on the map
+                        title: the title of the marker, displayed as text under its icon
+                        image: the src of the image to be used as its icon
+                        popupHTML: the HTML that will be displayed inside the popup
+                        It returns the marker object created.
+                    </td>
+                </tr>
+                <tr>
+                    <td><pre>em.showPopup(marker)</pre></td>
+                    <td>This is used to show the popup, rendering the HTML from the popupHTML specified in the addMarker function.
+                        If no onclick function is specified, this is called automatically when the marker is clicked.
+                    </td>
+                </tr>
+                <tr>
+                    <td><pre>em.hidePopup()</pre></td>
+                    <td>Hide the popup if it is showing. If no onclick function is specified, this is called automatically when the marker is clicked.
+                    </td>
+                </tr>
+                <tr>
+                    <td><pre>em.loadMarkers(markers)</pre></td>
+                    <td>This will load from the array of markers specified. (Explained in the next section)</td>
+                </tr>
+            </table>
+            
+            <p>
+                The most common function you'll be calling is <strong>addMarker</strong>, which has a number of params, however, coord is the only necessary one - the framework needs to know where to place the marker, after all:
+            </p>
+            <pre><code class='js'>
+    em.addMarker({
+        coord: [12345.67890, 12345.67890],
+        title: "Optional Title for the Marker",
+        image: "optional/path/to/image.png",
+        popupHTML: "&lt;p>some HTML for the content of the popup&lt;/p>"
+    });    
+            </code></pre>
+
+
+
+            <h3>Custom Callbacks/Popup Handling</h3>
+            <p>
+                If you do not want the default behavior when a marker is clicked (showing the popup) you can specify your own callback function. This is the <strong>markerClickFn</strong> member of the params object passed in when creating the framework:
+            </p>
+            <pre><code class='js'>
+    var em = makeEM({ 
+        mapId: "theIdOfYourMapDiv", 
+        markerClickFn: myClick 
+    });  
+       
+    function myClick(marker){
+        // do whatever you want here - all the fields of the marker object are accessible 
+        var coord = "(" + marker.coord[0] + ", " + marker.coord[1] + ")";
+        alert("You clicked on " + marker.title + ", located at " + coord + "!");
+
+        // the popup will be displayed, then hidden after 2 seconds
+        em.showPopup(marker);
+        setTimeout(em.hidePopup, 2000);
+    }
+            </code></pre>
+            <p>
+                The only requirement for the function is that it takes a single parameter which is the marker object. Here's an example map with a custom callback function, which also shows how to show/hide the popup through the <strong>em</strong> object:
+            </p>
+            <div id="sampleMap2" class="map"></div>
+            
+            
+            <h3>Using the EasyMarkers Editor</h3>
+            <p>
+                The <a href="editor.html"  target="_blank">EasyMarkers Editor</a>     may seem imposing at first because it is not labeled well, but it is really easy to use. Click on the map to place a pin; click as many times as you need to get the pin right, it will not be stored until you click the INSERT button. On the table in the bottom-left, you can change the marker title via the text input box. Then the bottom-middle panel is the HTML that will be displayed in the popup, which is previewed as you type in the next panel at the bottom-right. Also in the bottom-middle panel is the text input for the source of the image for the icon; if left blank, the default will be used.
+            </p>
+            <p>
+                Click the INSERT button in the table to commit the marker. If you'd like to remove a marker, hover the mouse over the row and click the DELETE button. Finally, when you are ready to get the code, click the Generate button at the top-right. This will open the code in a new tab; copy all of this with Ctrl+A, Ctrl+C, then use the function <strong>em.loadMarkers()</strong>, pasting the code into the function with Ctrl+V.
+            </p>
+
+        </div>
+
+
+        <div ng-include src="'bottom.html'"> </div> <!-- will insert "bottom.html" code here -->
+
+
+        
+        <script type="text/javascript">
+
+            var em1 = makeEM({ mapId: "sampleMap1" });
+
+            em1.loadMarkers([{"coord": [-5752956.496855505, -1141459.821446727], "title": "Brazil", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Emoji_u1f6a9.svg/40px-Emoji_u1f6a9.svg.png", "popupHTML": "<h2 id='title'>Brazil</h2>\n<p id='desc'>Something about brazil</p>"}, {"coord": [-11271098.442818947, 2498165.7173802257], "title": "Mexico", "image": "", "popupHTML": "<h2 id='title'>Mexico</h2>\n<p id='desc'>Mexico is cool</p>"}, {"coord": [5048512.844179325, -2119853.7834969824], "title": "Madagascar", "image": "", "popupHTML": "<h2 id='title'>Madagascar</h2>\n<p id='desc'>So big that it might not be an island?</p>"}, {"coord": [-1956787.9241005145, 9581738.002624083], "title": "Iceland", "image": "", "popupHTML": "<h2 id='title'>Iceland</h2>\n<p id='desc'>I want to go here and look at waterfalls</p>"}, {"coord": [8570731.10756024, 2732980.2682722863], "title": "India", "image": "", "popupHTML": "<h2 id='title'>India</h2>\n<img src=\"https://www.carstickers.com/prodimages/5847_india_country_flag_decal_sticker_small.png\">\n"}]);
+
+            em1.addMarker({
+                coord: [2371627.202875534, 2889523.3022003286],
+                title: "Libya",
+                image: "",
+                popupHTML: "\n\
+        <img src='https://www.gettysburgflag.com/media/catalog/product/cache/2/thumbnail/520x416/602f0fa2c1f0d1ba5e241f914e856ff9/l/i/libya-2014.png'>\n\
+        <p>Here's some sample text; something about Libya.</p>"
+            });
+
+
+            var em2 = makeEM({ mapId: "sampleMap2", markerClickFn: myClick});
+            
+            em2.addMarker({
+                coord: [2371627.202875534, 2889523.3022003286],
+                title: "Libya",
+                image: "",
+                popupHTML: "\n\
+        <img src='https://www.gettysburgflag.com/media/catalog/product/cache/2/thumbnail/520x416/602f0fa2c1f0d1ba5e241f914e856ff9/l/i/libya-2014.png'>\n\
+        <p>Here's some sample text; something about Libya.</p>"
+            });
+            
+            function myClick(marker){
+                var coord = "("+marker.coord[0]+", "+marker.coord[1]+")";
+                alert("You clicked on "+marker.title+", located at "+coord+"!");
+                // the popup will be displayed, then hidden after 2 seconds
+                em2.showPopup(marker);
+                setTimeout(em2.hidePopup, 2000);
+            }
+
+        </script>
+        
+        <script src="linkController.js"></script>
+
+    </body>
+</html>
